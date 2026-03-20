@@ -1,23 +1,32 @@
-const express  = require("express");
-const cors     = require("cors");
-const books    = require("./data/books");
+const express = require("express");
+const cors    = require("cors");
+const books   = require("./data/books");
 
 const app = express();
-app.use(cors());
+
+// Allow requests from your frontend URLs
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:4173",
+    "https://ebookstore-backend-pm1p.onrender.com"
+  ]
+}));
+
 app.use(express.json());
 
-// GET all books — same as GET /api/products in Module 2
+// GET all books
 app.get("/api/books", (req, res) => {
   res.json(books);
 });
 
-// GET unique genres — same as Module 2's bonus categories endpoint
+// GET unique genres
 app.get("/api/genres", (req, res) => {
   const genres = [...new Set(books.map(b => b.genre))];
   res.json(genres);
 });
 
-// Root route — confirms server is running
+// Root route
 app.get("/", (req, res) => {
   res.send("Ebookstore API is running...");
 });
